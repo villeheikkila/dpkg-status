@@ -10,6 +10,8 @@ const PackageModal = ({
   data: any;
   onSelect: (id: number) => void;
 }) => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
   if (id === null) return null;
 
   const { dependencies, description, name, alternatives } = data.find(
@@ -23,6 +25,13 @@ const PackageModal = ({
   const getAltDeps =
     alternatives &&
     alternatives.map((id: any) => data.find((_: any) => _.id === id));
+
+  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      const value = inputRef?.current?.value || "";
+      console.log(value);
+    }
+  };
 
   return (
     <Container>
@@ -38,35 +47,43 @@ const PackageModal = ({
         <p>{description}</p>
       </ModalContent>
 
+      {(getDeps || getAltDeps) && (
+        <ModalContent>
+          {getDeps && (
+            <>
+              <HeadingText>
+                <h4 style={{ margin: 0 }}>Dependencies</h4>
+              </HeadingText>
+
+              <div style={{ height: "10px" }}> </div>
+
+              <ChipContainer>
+                {getDeps?.map((e: any) => (
+                  <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
+                ))}
+              </ChipContainer>
+            </>
+          )}
+
+          {getAltDeps && (
+            <>
+              <HeadingText>
+                <h4 style={{ margin: 0 }}> Alternatives</h4>
+              </HeadingText>
+              <ChipContainer>
+                {getAltDeps?.map((e: any) => (
+                  <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
+                ))}
+              </ChipContainer>
+            </>
+          )}
+        </ModalContent>
+      )}
       <ModalContent>
-        {getDeps && (
-          <>
-            <HeadingText>
-              <h4 style={{ margin: 0 }}>Dependencies</h4>
-            </HeadingText>
-
-            <div style={{ height: "10px" }}> </div>
-
-            <ChipContainer>
-              {getDeps?.map((e: any) => (
-                <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
-              ))}
-            </ChipContainer>
-          </>
-        )}
-
-        {getAltDeps && (
-          <>
-            <HeadingText>
-              <h4 style={{ margin: 0 }}> Alternatives</h4>
-            </HeadingText>
-            <ChipContainer>
-              {getAltDeps?.map((e: any) => (
-                <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
-              ))}
-            </ChipContainer>
-          </>
-        )}
+        <HeadingText>
+          <h4 style={{ margin: 0 }}>Tags</h4>
+        </HeadingText>
+        <Input ref={inputRef} onKeyPress={onKeyPress} />
       </ModalContent>
     </Container>
   );
@@ -78,6 +95,10 @@ const Name = styled.div`
   text-align: center;
   vertical-align: middle;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+`;
+
+const Input = styled.input`
+  width: 150px;
 `;
 
 const HeadingText = styled.div`
