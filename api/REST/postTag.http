@@ -1,0 +1,7 @@
+POST http://localhost:2222/api/tags HTTP/1.1
+content-type: application/json
+
+{
+    "tag": "TESTI TESTI 2",
+    "packageId": 1
+}

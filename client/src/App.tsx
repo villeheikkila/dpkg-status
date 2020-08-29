@@ -1,28 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import PackageCard from "./components/PackageCard";
 import Portal from "./components/Portal";
 import PackageModal from "./components/PackageModal";
-
-const useAxios = (baseUrl: string) => {
-  const [url, setUrl] = useState(baseUrl);
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await axios(url);
-
-        setData(result.data.data);
-      } catch (error) {}
-    };
-
-    fetchData();
-  }, [url]);
-
-  return data;
-};
+import useAxios from "./hooks/useAxios";
 
 const App = () => {
   const data: any = useAxios("http://localhost:2222/api/packages");

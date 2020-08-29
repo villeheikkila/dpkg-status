@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const PackageModal = ({
   id,
@@ -11,6 +12,15 @@ const PackageModal = ({
   onSelect: (id: number) => void;
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const [tags, setTags] = useState<string[]>([]);
+
+  useEffect(() => {
+    (async function fetchMyAPI() {
+      const { data } = await axios.get(`http://localhost:2222/api/tags/${id}`);
+      const tags = data.data.map((e: any) => e.tag);
+      setTags(tags);
+    })();
+  }, []);
 
   if (id === null) return null;
 
@@ -26,10 +36,20 @@ const PackageModal = ({
     alternatives &&
     alternatives.map((id: any) => data.find((_: any) => _.id === id));
 
-  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       const value = inputRef?.current?.value || "";
-      console.log(value);
+
+      if (value === "") return;
+
+      const res = await axios.post("http://localhost:2222/api/tags", {
+        tag: value,
+        packageId: id,
+      });
+
+      if (res.status === 201) {
+        setTags([...tags, res.data.data[0].tag]);
+      }
     }
   };
 
@@ -84,6 +104,11 @@ const PackageModal = ({
           <h4 style={{ margin: 0 }}>Tags</h4>
         </HeadingText>
         <Input ref={inputRef} onKeyPress={onKeyPress} />
+        <ChipContainer>
+          {tags.map((tag) => (
+            <Chip>{tag}</Chip>
+          ))}
+        </ChipContainer>
       </ModalContent>
     </Container>
   );
