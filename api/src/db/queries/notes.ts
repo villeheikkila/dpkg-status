@@ -17,10 +17,4 @@ const deleteNoteByID = (id: number) => {
     return knex('notes').del().where({ id }).returning('*');
 };
 
-module.exports = {
-    getNotesByPackageId,
-    addNote,
-    deleteNoteByID,
-};
-
-export {};
+export { getNotesByPackageId, addNote, deleteNoteByID };

@@ -16,18 +16,18 @@ router.get(BASE_URL, async (ctx: Context) => {
         // Parse the relevant data from the file
         const relevantData = parseDkpkStatus(data);
 
-        for (let index = 0; index < relevantData.length; index++) {
-            const { name, description } = relevantData[index];
+        for (let i = 0; i < relevantData.length; i++) {
+            const { name, description } = relevantData[i];
             try {
                 await knex('packages').insert({ name, description }).returning('*');
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                console.error(error);
             }
         }
 
-        for (let index = 0; index < relevantData.length; index++) {
-            const deps = relevantData[index].dependencies;
-            const alts = relevantData[index].alternatives;
+        for (let i = 0; i < relevantData.length; i++) {
+            const deps = relevantData[i].dependencies;
+            const alts = relevantData[i].alternatives;
 
             const ids = [];
 
@@ -37,11 +37,11 @@ router.get(BASE_URL, async (ctx: Context) => {
             }
             try {
                 const idsToAdd = ids.length !== 0 ? ids.filter((e) => e?.id !== undefined).map((e) => e.id) : null;
-                await knex('packages').where({ name: relevantData[index].name }).update({
+                await knex('packages').where({ name: relevantData[i].name }).update({
                     dependencies: idsToAdd,
                 });
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                console.error(error);
             }
 
             const altIds = [];
@@ -53,11 +53,11 @@ router.get(BASE_URL, async (ctx: Context) => {
             try {
                 const idsToAdd =
                     altIds.length !== 0 ? altIds.filter((e) => e?.id !== undefined).map((e) => e.id) : null;
-                await knex('packages').where({ name: relevantData[index].name }).update({
+                await knex('packages').where({ name: relevantData[i].name }).update({
                     alternatives: idsToAdd,
                 });
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                console.error(error);
             }
         }
 
@@ -67,12 +67,12 @@ router.get(BASE_URL, async (ctx: Context) => {
             status: 'Succesfully initialized the database with data from the status file.',
             data: db,
         };
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
         ctx.body = {
             status: 'Initialization encountered an error',
         };
     }
 });
 
-module.exports = router;
+export default router;

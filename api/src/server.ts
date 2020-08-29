@@ -3,10 +3,10 @@ const bodyParser = require('koa-bodyparser');
 const cors = require('@koa/cors');
 const serve = require('koa-static');
 const mount = require('koa-mount');
-const initRoute = require('./routes/init');
-const packagesRoute = require('./routes/packages');
-const tagsRoute = require('./routes/tags');
-const notesRoute = require('./routes/notes');
+import initRoute from './routes/init';
+import tagsRoute from './routes/tags';
+import notesRoute from './routes/notes';
+import packagesRoute from './routes/packages';
 
 const app = new Koa();
 const build = new Koa();

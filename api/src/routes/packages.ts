@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const queries = require('../db/queries/packages');
+import { getAllPackages, getPackageByID } from '../db/queries/packages';
 import { Context } from 'koa';
 
 const router = new Router();
@@ -7,20 +7,20 @@ const BASE_URL = `/api/packages`;
 
 router.get(BASE_URL, async (ctx: Context) => {
     try {
-        const packages = await queries.getAllPackages();
+        const packages = await getAllPackages();
 
         ctx.body = {
             status: 'success',
             data: packages,
         };
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.error(error);
     }
 });
 
 router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
-        const packages = await queries.getPackageByID(ctx.params.id);
+        const packages = await getPackageByID(ctx.params.id);
 
         if (packages.length) {
             ctx.body = {
@@ -34,9 +34,9 @@ router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
                 message: 'No such package found.',
             };
         }
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.error(error);
     }
 });
 
-module.exports = router;
+export default router;

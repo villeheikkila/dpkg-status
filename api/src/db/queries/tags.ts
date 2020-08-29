@@ -17,10 +17,4 @@ const deleteTagByID = (id: number) => {
     return knex('tags').del().where({ id }).returning('*');
 };
 
-module.exports = {
-    getTagsByPackageId,
-    addTag,
-    deleteTagByID,
-};
-
-export {};
+export { getTagsByPackageId, addTag, deleteTagByID };

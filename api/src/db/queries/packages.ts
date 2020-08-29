@@ -4,7 +4,7 @@ const getAllPackages = () => {
     return knex('packages').select('*');
 };
 
-const getPackageByID = (id: string) => {
+const getPackageByID = (id: number) => {
     return knex('packages').select('*').where({ id });
 };
 
@@ -12,8 +12,4 @@ const getPackageByName = (name: string) => {
     return knex('packages').select('*').where({ name });
 };
 
-module.exports = {
-    getAllPackages,
-    getPackageByID,
-    getPackageByName,
-};
+export { getAllPackages, getPackageByID, getPackageByName };

@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const queries = require('../db/queries/tags');
+import { getTagsByPackageId, addTag, deleteTagByID } from '../db/queries/tags';
 import { Context } from 'koa';
 
 const router = new Router();
@@ -7,7 +7,7 @@ const BASE_URL = `/api/tags`;
 
 router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
-        const tags = await queries.getTagsByPackageId(ctx.params.id);
+        const tags = await getTagsByPackageId(ctx.params.id);
 
         if (tags.length) {
             ctx.body = {
@@ -21,15 +21,15 @@ router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
                 message: 'That tag does not exist.',
             };
         }
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.error(error);
     }
 });
 
 router.post(`${BASE_URL}`, async (ctx: Context) => {
     try {
         const body = ctx.request.body;
-        const tag = await queries.addTag(body);
+        const tag = await addTag(body);
 
         if (tag.length) {
             ctx.status = 201;
@@ -44,18 +44,18 @@ router.post(`${BASE_URL}`, async (ctx: Context) => {
                 message: 'Something went wrong.',
             };
         }
-    } catch (err) {
+    } catch (error) {
         ctx.status = 400;
         ctx.body = {
             status: 'error',
-            message: err.message || 'Sorry, an error has occurred.',
+            message: error.message || 'Sorry, an error has occurred.',
         };
     }
 });
 
 router.delete(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
-        const tag = await queries.deleteTag(ctx.params.id);
+        const tag = await deleteTagByID(ctx.params.id);
 
         if (tag.length) {
             ctx.status = 200;
@@ -70,13 +70,13 @@ router.delete(`${BASE_URL}/:id`, async (ctx: Context) => {
                 message: 'That tag does not exist.',
             };
         }
-    } catch (err) {
+    } catch (error) {
         ctx.status = 400;
         ctx.body = {
             status: 'error',
-            message: err.message || 'Sorry, an error has occurred.',
+            message: error.message || 'Sorry, an error has occurred.',
         };
     }
 });
 
-module.exports = router;
+export default router;
