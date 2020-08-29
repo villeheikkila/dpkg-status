@@ -63,9 +63,12 @@ const PackageModal = ({
 
   const onNoteSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const note = textRef.current?.value;
+
+    if (!note) return null;
 
     const res = await axios.post("http://localhost:2222/api/notes", {
-      note: "asdasd",
+      note,
       packageId: id,
     });
 
