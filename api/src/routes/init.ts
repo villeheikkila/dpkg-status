@@ -68,7 +68,10 @@ router.get(BASE_URL, async (ctx: Context) => {
             data: db,
         };
     } catch (err) {
-        console.log(err);
+        console.error(err);
+        ctx.body = {
+            status: 'Initialization encountered an error',
+        };
     }
 });
 
