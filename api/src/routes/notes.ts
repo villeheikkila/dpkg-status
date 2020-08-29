@@ -1,24 +1,24 @@
 const Router = require('koa-router');
-const queries = require('../db/queries/tags');
+const queries = require('../db/queries/notes');
 import { Context } from 'koa';
 
 const router = new Router();
-const BASE_URL = `/api/tags`;
+const BASE_URL = `/api/notes`;
 
 router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
-        const tags = await queries.getTagsByPackageId(ctx.params.id);
+        const notes = await queries.getNotesByPackageId(ctx.params.id);
 
-        if (tags.length) {
+        if (notes.length) {
             ctx.body = {
                 status: 'success',
-                data: tags,
+                data: notes,
             };
         } else {
             ctx.status = 404;
             ctx.body = {
                 status: 'error',
-                message: 'That tag does not exist.',
+                message: 'That note does not exist.',
             };
         }
     } catch (err) {
@@ -29,13 +29,13 @@ router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
 router.post(`${BASE_URL}`, async (ctx: Context) => {
     try {
         const body = ctx.request.body;
-        const tag = await queries.addTag(body);
+        const note = await queries.addNote(body);
 
-        if (tag.length) {
+        if (note.length) {
             ctx.status = 201;
             ctx.body = {
                 status: 'success',
-                data: tag,
+                data: note,
             };
         } else {
             ctx.status = 400;
@@ -55,7 +55,7 @@ router.post(`${BASE_URL}`, async (ctx: Context) => {
 
 router.delete(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
-        const tag = await queries.deleteTag(ctx.params.id);
+        const tag = await queries.deleteNote(ctx.params.id);
 
         if (tag.length) {
             ctx.status = 200;

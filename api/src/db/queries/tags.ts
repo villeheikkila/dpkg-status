@@ -13,11 +13,8 @@ const addTag = (tag: Tag) => {
     return knex('tags').insert(tag).returning('*');
 };
 
-const deleteTagByID = (id: string) => {
-    return knex('tags')
-        .del()
-        .where({ id: parseInt(id) })
-        .returning('*');
+const deleteTagByID = (id: number) => {
+    return knex('tags').del().where({ id }).returning('*');
 };
 
 module.exports = {

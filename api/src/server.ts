@@ -6,6 +6,7 @@ const mount = require('koa-mount');
 const initRoute = require('./routes/init');
 const packagesRoute = require('./routes/packages');
 const tagsRoute = require('./routes/tags');
+const notesRoute = require('./routes/notes');
 
 const app = new Koa();
 const build = new Koa();
@@ -19,6 +20,7 @@ app.use(bodyParser());
 app.use(initRoute.routes());
 app.use(packagesRoute.routes());
 app.use(tagsRoute.routes());
+app.use(notesRoute.routes());
 
 const server = app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);

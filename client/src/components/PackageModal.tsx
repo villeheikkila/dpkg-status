@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -11,14 +11,22 @@ const PackageModal = ({
   data: any;
   onSelect: (id: number) => void;
 }) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLTextAreaElement>(null);
   const [tags, setTags] = useState<string[]>([]);
+  const [notes, setNotes] = useState<string[]>([]);
 
   useEffect(() => {
-    (async function fetchMyAPI() {
+    (async () => {
       const { data } = await axios.get(`http://localhost:2222/api/tags/${id}`);
       const tags = data.data.map((e: any) => e.tag);
       setTags(tags);
+    })();
+
+    (async () => {
+      const { data } = await axios.get(`http://localhost:2222/api/notes/${id}`);
+      const tags = data.data.map((e: any) => e.note);
+      setNotes(tags);
     })();
   }, []);
 
@@ -50,6 +58,19 @@ const PackageModal = ({
       if (res.status === 201) {
         setTags([...tags, res.data.data[0].tag]);
       }
+    }
+  };
+
+  const onNoteSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const res = await axios.post("http://localhost:2222/api/notes", {
+      note: "asdasd",
+      packageId: id,
+    });
+
+    if (res.status === 201) {
+      setNotes([...tags, res.data.data[0].note]);
     }
   };
 
@@ -110,6 +131,17 @@ const PackageModal = ({
           ))}
         </ChipContainer>
       </ModalContent>
+
+      <ModalContent>
+        <HeadingText>
+          <h4 style={{ margin: 0 }}>Notes</h4>
+        </HeadingText>
+        {notes}
+        <form onSubmit={onNoteSubmit}>
+          <TextArea ref={textRef} />
+          <input type="submit" value="Submit" />
+        </form>
+      </ModalContent>
     </Container>
   );
 };
@@ -163,6 +195,13 @@ const ModalContent = styled.div<{ height?: number }>`
   height: ${(props) => props.height};
   margin-top: 5px;
   padding: 20px;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  height: 100px;
+  border: 1px solid black;
+  resize: none;
 `;
 
 export default PackageModal;
