@@ -1,34 +1,21 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  MutableRefObject,
-  RefObject,
-} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import Package from "./components/Package";
+import PackageCard from "./components/PackageCard";
+import Portal from "./components/Portal";
+import PackageModal from "./components/PackageModal";
 
 const useAxios = (baseUrl: string) => {
   const [url, setUrl] = useState(baseUrl);
   const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsError(false);
-      setIsLoading(true);
-
       try {
         const result = await axios(url);
 
         setData(result.data.data);
-      } catch (error) {
-        setIsError(true);
-      }
-
-      setIsLoading(false);
+      } catch (error) {}
     };
 
     fetchData();
@@ -41,10 +28,9 @@ const App = () => {
   const data: any = useAxios("http://localhost:2222/api/packages");
   const [search, setSearch] = useState("");
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const [showModal, setShowModal] = useState<number | null>(null);
 
-  React.useEffect(() => {}, []);
-
-  if (!data) return <div></div>;
+  if (!data) return <div>Loading</div>;
 
   const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -58,7 +44,7 @@ const App = () => {
     .sort((a: any, b: any) => a.name > b.name);
 
   return (
-    <div>
+    <>
       <Header>
         <Heading>dkpg-status</Heading>
         <Input placeholder="Search..." ref={inputRef} onKeyPress={onKeyPress} />
@@ -69,16 +55,26 @@ const App = () => {
       </Header>
       <Page>
         <GridWrapper>
-          {sortedData?.map(({ id, name, description }: any) => (
-            <Package
+          {sortedData?.map(({ id, name, description, ...rest }: any) => (
+            <PackageCard
               key={`package-${id}`}
               name={name}
               description={description}
-            ></Package>
+              onClick={() => setShowModal(id)}
+            />
           ))}
         </GridWrapper>
       </Page>
-    </div>
+      {showModal !== null && (
+        <Portal onClose={() => setShowModal(null)}>
+          <PackageModal
+            data={data}
+            id={showModal}
+            onSelect={(selected: number) => setShowModal(selected)}
+          ></PackageModal>
+        </Portal>
+      )}
+    </>
   );
 };
 

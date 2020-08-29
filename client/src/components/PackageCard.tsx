@@ -1,30 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import Portal from "./Portal";
 
-const Package = ({
+const PackageCard = ({
   name,
   description,
+  onClick,
 }: {
   name: string;
   description: string;
+  onClick: () => void;
 }) => {
-  const [showModal, setShowModal] = useState(false);
-
   return (
     <>
-      <Wrapper onClick={() => setShowModal(true)}>
+      <Wrapper onClick={onClick}>
         <Name>
           <h3>{name}</h3>
         </Name>
+        <div style={{ height: "2px" }}> </div>
+
         <Content>{description?.split(".")[0] || null}</Content>
       </Wrapper>
-
-      {showModal && (
-        <Portal onClose={() => setShowModal(false)}>
-          <ModalContainer></ModalContainer>
-        </Portal>
-      )}
     </>
   );
 };
@@ -47,7 +42,6 @@ const Name = styled.div`
   text-align: center;
   vertical-align: middle;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  margin-bottom: 2px;
 `;
 
 const Content = styled.div`
@@ -59,10 +53,4 @@ const Content = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
 
-const ModalContainer = styled.div`
-  width: 800px;
-  height: 800px;
-  background-color: black;
-`;
-
-export default Package;
+export default PackageCard;

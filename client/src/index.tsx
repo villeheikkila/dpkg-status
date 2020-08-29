@@ -6,11 +6,11 @@ import * as serviceWorker from "./serviceWorker";
 import { PortalProvider } from "./components/Portal";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <PortalProvider>
+  <PortalProvider>
+    <React.StrictMode>
       <App />
-    </PortalProvider>
-  </React.StrictMode>,
+    </React.StrictMode>
+  </PortalProvider>,
   document.getElementById("root")
 );
 
