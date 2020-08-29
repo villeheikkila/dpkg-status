@@ -8,8 +8,9 @@ const BASE_URL = `/api/notes`;
 router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
         const notes = await getNotesByPackageId(ctx.params.id);
+        console.log('notes: ', notes);
 
-        if (notes.length) {
+        if (notes) {
             ctx.body = {
                 status: 'success',
                 data: notes,
@@ -31,7 +32,7 @@ router.post(`${BASE_URL}`, async (ctx: Context) => {
         const body = ctx.request.body;
         const note = await addNote(body);
 
-        if (note.length) {
+        if (note) {
             ctx.status = 201;
             ctx.body = {
                 status: 'success',

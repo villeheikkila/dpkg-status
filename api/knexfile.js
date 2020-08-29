@@ -1,7 +1,7 @@
 module.exports = {
     development: {
         client: 'pg',
-        connection: 'postgres://localhost/dkpk',
+        connection: 'postgres://localhost/dkpkdb',
         migrations: {
             directory: __dirname + '/src/db/migrations',
         },

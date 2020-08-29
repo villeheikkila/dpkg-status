@@ -2,6 +2,6 @@ POST http://localhost:2222/api/notes HTTP/1.1
 content-type: application/json
 
 {
-    "note": "TESTI TESTI 2",
-    "packageId": 403
+    "note": "adasdas",
+    "packageId": 1
 }

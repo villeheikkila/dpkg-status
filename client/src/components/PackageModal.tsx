@@ -56,7 +56,7 @@ const PackageModal = ({
       });
 
       if (res.status === 201) {
-        setTags([...tags, res.data.data[0].tag]);
+        setTags([...tags, res.data.data.tag]);
       }
     }
   };
@@ -70,7 +70,7 @@ const PackageModal = ({
     });
 
     if (res.status === 201) {
-      setNotes([...tags, res.data.data[0].note]);
+      setNotes([...tags, res.data.data.note]);
     }
   };
 

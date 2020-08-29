@@ -31,7 +31,7 @@ router.post(`${BASE_URL}`, async (ctx: Context) => {
         const body = ctx.request.body;
         const tag = await addTag(body);
 
-        if (tag.length) {
+        if (tag) {
             ctx.status = 201;
             ctx.body = {
                 status: 'success',

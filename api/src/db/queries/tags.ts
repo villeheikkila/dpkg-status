@@ -5,16 +5,18 @@ interface Tag {
     tag: string;
 }
 
-const getTagsByPackageId = (id: number) => {
-    return knex('tags').select('*').where({ packageId: id });
-};
+const getTagsByPackageId = (packageId: number) => knex('tags').select('*').where({ packageId });
 
-const addTag = (tag: Tag) => {
-    return knex('tags').insert(tag).returning('*');
-};
+const addTag = ({ tag, packageId }: Tag) =>
+    knex('tags')
+        .insert({ tag })
+        .returning('id')
+        .then((response: any) => {
+            knex('packages_tags').insert({ packageId, tagId: response[0] });
+            return response[0];
+        })
+        .then((id: number) => knex('tags').first().where({ id }));
 
-const deleteTagByID = (id: number) => {
-    return knex('tags').del().where({ id }).returning('*');
-};
+const deleteTagByID = (id: number) => knex('tags').del().where({ id }).returning('*');
 
 export { getTagsByPackageId, addTag, deleteTagByID };
