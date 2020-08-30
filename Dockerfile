@@ -16,5 +16,7 @@ RUN mv ./client/build ./api
 
 WORKDIR /usr/src/app/api
 RUN npm install
-RUN npm run knex-migrate
+
+RUN npm i knex -g
+
 CMD [ "npm", "start" ]
