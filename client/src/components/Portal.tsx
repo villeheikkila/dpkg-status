@@ -39,7 +39,7 @@ const PortalContent = styled.div`
   position: absolute;
   z-index: 100;
   position: absolute;
-  top: 30%;
+  top: 15%;
   left: 30%;
   margin-top: -50px;
   margin-left: -50px;

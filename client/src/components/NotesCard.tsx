@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import ModalCardSection from "./ModalCardSection";
 
-const NotesCard = ({ id }: { id: number | null }) => {
+const NotesCard = ({ id }: { id: number }) => {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const [notes, setNotes] = useState<string[]>([]);
 
   useEffect(() => {
     (async () => {
       const { data } = await axios.get(`http://localhost:2222/api/notes/${id}`);
-      const tags = data.data.map((e: any) => e.note);
-      setNotes(tags);
+      const notes = data.data.map((e: any) => e.note);
+      setNotes(notes);
     })();
   }, [id]);
 
@@ -33,11 +34,7 @@ const NotesCard = ({ id }: { id: number | null }) => {
   };
 
   return (
-    <ModalContent>
-      <HeadingText>
-        <h4 style={{ margin: 0 }}>Notes</h4>
-      </HeadingText>
-
+    <ModalCardSection heading="notes">
       <NoteContainer>
         {notes.map((note) => (
           <Note>{note}</Note>
@@ -48,25 +45,9 @@ const NotesCard = ({ id }: { id: number | null }) => {
         <TextArea ref={textRef} />
         <input type="submit" value="Submit" />
       </form>
-    </ModalContent>
+    </ModalCardSection>
   );
 };
-
-const HeadingText = styled.div`
-  text-align: center;
-  vertical-align: middle;
-  width: 100%;
-`;
-
-const ModalContent = styled.div<{ height?: number }>`
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
-  height: ${(props) => props.height};
-  margin-top: 5px;
-  padding: 20px;
-`;
 
 const TextArea = styled.textarea`
   width: 100%;

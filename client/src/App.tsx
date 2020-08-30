@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PackageCard from "./components/PackageCard";
 import Portal from "./components/Portal";
@@ -6,9 +6,9 @@ import PackageModal from "./components/PackageModal";
 import useAxios from "./hooks/useAxios";
 import Search, { Tag } from "./components/Search";
 
-interface Package {
+export interface Package {
   alternatives: number[] | null;
-  dependencies: number[] | null;
+  dependencies: number[];
   description: string | null;
   id: number;
   name: string;
@@ -18,16 +18,16 @@ interface Package {
 const App = () => {
   const data: Package[] = useAxios("http://localhost:2222/api/packages");
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-  const [showModal, setShowModal] = useState<number | null>(null);
+  const [showPackage, setShowPackage] = useState<number | null>(null);
 
   if (!data) return <div>Loading</div>;
 
   const filteredData =
     selectedTags.length === 0
       ? data
-      : data.filter(({ tags }: any) => {
-          const data = selectedTags.map(({ id }: any) => tags.includes(id));
-          return data.every((check: boolean) => check === true);
+      : data.filter(({ tags }) => {
+          const data = selectedTags.map(({ id }) => tags.includes(id));
+          return data.every((check) => check === true);
         });
 
   const sortedData = filteredData.sort((a, b) =>
@@ -45,6 +45,7 @@ const App = () => {
           <p>Currently showing: {sortedData.length}</p>
         </Stats>
       </Header>
+
       <Page>
         <GridWrapper>
           {sortedData.map(({ id, name, description }) => (
@@ -52,18 +53,19 @@ const App = () => {
               key={`package-${id}`}
               name={name}
               description={description || ""}
-              onClick={() => setShowModal(id)}
+              onClick={() => setShowPackage(id)}
             />
           ))}
         </GridWrapper>
       </Page>
-      {showModal !== null && (
-        <Portal onClose={() => setShowModal(null)}>
+
+      {showPackage !== null && (
+        <Portal onClose={() => setShowPackage(null)}>
           <PackageModal
             data={data}
-            id={showModal}
-            onSelect={(selected: number) => setShowModal(selected)}
-          ></PackageModal>
+            id={showPackage}
+            onSelect={(selected: number) => setShowPackage(selected)}
+          />
         </Portal>
       )}
     </>
@@ -77,7 +79,7 @@ const GridWrapper = styled.div`
 `;
 
 const Page = styled.div`
-  padding: 2rem;
+  padding: 2rem 2vw;
 `;
 
 const Header = styled.header`

@@ -14,9 +14,13 @@ const Search = ({
 }: {
   setSelectedTags: (tags: Tag[]) => void;
 }) => {
-  const tags: any = useAxios("http://localhost:2222/api/tags");
-  const [search, setSearch] = useState<string | null>(null);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const tags: Tag[] = useAxios("http://localhost:2222/api/tags");
+  const [search, setSearch] = useState<string>("");
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    setSearch(inputValue);
+  }, [inputValue]);
 
   const [selectedTags, dispatch] = useReducer((state: any, action: any) => {
     switch (action.type) {
@@ -40,31 +44,28 @@ const Search = ({
   }, [selectedTags]);
 
   const filteredTags =
-    tags && tags.filter((e: any) => e.tag.includes(search)).slice(0, 10);
+    tags && tags.filter((e) => e.tag.includes(search)).slice(0, 10);
 
   if (!tags) return null;
-
-  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const value = inputRef?.current?.value || "";
-      setSearch(value);
-    }
-  };
 
   const onClick = (tag: any) => {
     dispatch({
       type: "add",
       tag,
     });
-    setSearch(null);
+    setSearch("");
   };
 
   return (
     <SearchArea>
-      <Input placeholder="Search..." ref={inputRef} onKeyPress={onKeyPress} />
+      <Input
+        placeholder="Search..."
+        value={inputValue}
+        onChange={({ target }) => setInputValue(target.value)}
+      />
 
       <Container>
-        <Menu display={search !== null ? "block" : "none"}>
+        <Menu display={search !== "" ? "block" : "none"}>
           {filteredTags.map((tag: any) => (
             <Item>
               <Button onClick={() => onClick(tag)}>{tag.tag}</Button>

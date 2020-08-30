@@ -2,75 +2,61 @@ import React from "react";
 import styled from "styled-components";
 import NotesCard from "./NotesCard";
 import TagsCard from "./TagsCard";
+import ModalCardSection from "./ModalCardSection";
+import { Package } from "../App";
 
 const PackageModal = ({
   id,
   data,
   onSelect,
 }: {
-  id: number | null;
-  data: any;
+  id: number;
+  data: Package[];
   onSelect: (id: number) => void;
 }) => {
-  if (id === null) return null;
+  const packageData = data.find((unit: Package) => unit.id === id);
 
-  const { dependencies, description, name, alternatives } = data.find(
-    (unit: any) => unit.id === id
-  );
+  if (!packageData) return null;
 
-  const getDeps =
-    dependencies &&
-    dependencies.map((id: any) => data.find((_: any) => _.id === id));
+  const { dependencies, description, name, alternatives } = packageData;
+  console.log("dependencies: ", dependencies);
 
-  const getAltDeps =
-    alternatives &&
-    alternatives.map((id: any) => data.find((_: any) => _.id === id));
+  const getDeps = dependencies
+    ? dependencies.map((id: number) => data.find((_: Package) => _.id === id))
+    : [];
+
+  const getAltDeps = alternatives
+    ? alternatives.map((id: number) => data.find((_: Package) => _.id === id))
+    : [];
 
   return (
     <Container>
-      <Name>
+      <CardHeader>
         <h3>{name}</h3>
-      </Name>
+      </CardHeader>
 
-      <ModalContent>
-        <HeadingText>
-          <h4 style={{ margin: 0 }}>Description</h4>
-        </HeadingText>
-
+      <ModalCardSection heading="description">
         <p>{description}</p>
-      </ModalContent>
+      </ModalCardSection>
 
-      {(getDeps || getAltDeps) && (
-        <ModalContent>
-          {getDeps && (
-            <>
-              <HeadingText>
-                <h4 style={{ margin: 0 }}>Dependencies</h4>
-              </HeadingText>
+      {getAltDeps !== [] && (
+        <ModalCardSection heading="dependencies">
+          <ChipContainer>
+            {getDeps.map((e: any) => (
+              <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
+            ))}
+          </ChipContainer>
+        </ModalCardSection>
+      )}
 
-              <div style={{ height: "10px" }}> </div>
-
-              <ChipContainer>
-                {getDeps?.map((e: any) => (
-                  <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
-                ))}
-              </ChipContainer>
-            </>
-          )}
-
-          {getAltDeps && (
-            <>
-              <HeadingText>
-                <h4 style={{ margin: 0 }}> Alternatives</h4>
-              </HeadingText>
-              <ChipContainer>
-                {getAltDeps?.map((e: any) => (
-                  <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
-                ))}
-              </ChipContainer>
-            </>
-          )}
-        </ModalContent>
+      {getAltDeps !== [] && (
+        <ModalCardSection heading="alternatives">
+          <ChipContainer>
+            {getAltDeps.map((e: any) => (
+              <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
+            ))}
+          </ChipContainer>
+        </ModalCardSection>
       )}
 
       <TagsCard id={id} />
@@ -79,18 +65,12 @@ const PackageModal = ({
   );
 };
 
-const Name = styled.div`
+const CardHeader = styled.div`
   width: 100%;
   background: #f8f9fa;
   text-align: center;
   vertical-align: middle;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
-
-const HeadingText = styled.div`
-  text-align: center;
-  vertical-align: middle;
-  width: 100%;
 `;
 
 const Chip = styled.button`
@@ -114,16 +94,6 @@ const Container = styled.div`
   width: 800px;
   display: flex;
   flex-direction: column;
-`;
-
-const ModalContent = styled.div<{ height?: number }>`
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
-  height: ${(props) => props.height};
-  margin-top: 5px;
-  padding: 20px;
 `;
 
 export default PackageModal;

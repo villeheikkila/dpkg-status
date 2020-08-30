@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import ModalCardSection from "./ModalCardSection";
 
-const TagsCard = ({ id }: { id: number | null }) => {
+const TagsCard = ({ id }: { id: number }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [tags, setTags] = useState<string[]>([]);
 
@@ -34,28 +35,19 @@ const TagsCard = ({ id }: { id: number | null }) => {
   };
 
   return (
-    <ModalContent>
-      <HeadingText>
-        <h4 style={{ margin: 0 }}>Tags</h4>
-      </HeadingText>
+    <ModalCardSection heading="tags">
       <Input ref={inputRef} onKeyPress={onKeyPress} />
       <ChipContainer>
         {tags.map((tag) => (
           <Chip>{tag}</Chip>
         ))}
       </ChipContainer>
-    </ModalContent>
+    </ModalCardSection>
   );
 };
 
 const Input = styled.input`
   width: 150px;
-`;
-
-const HeadingText = styled.div`
-  text-align: center;
-  vertical-align: middle;
-  width: 100%;
 `;
 
 const Chip = styled.button`
@@ -73,16 +65,6 @@ const ChipContainer = styled.div`
   grid-gap: 10px;
   width: 100%;
   grid-template-columns: repeat(auto-fill, 110px);
-`;
-
-const ModalContent = styled.div<{ height?: number }>`
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
-  height: ${(props) => props.height};
-  margin-top: 5px;
-  padding: 20px;
 `;
 
 export default TagsCard;
