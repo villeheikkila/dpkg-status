@@ -19,6 +19,10 @@ const TagsCard = ({ id }: { id: number }) => {
     })();
   }, [id]);
 
+  useEffect(() => {
+    inputRef?.current?.focus();
+  }, []);
+
   const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       addTag();

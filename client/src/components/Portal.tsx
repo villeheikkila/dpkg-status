@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import ReactDOM from "react-dom";
 import styled, { keyframes } from "styled-components";
 
@@ -13,6 +19,20 @@ const Portal: React.FC<{ onClose: () => void }> = ({ onClose, children }) => {
     }
     onClose();
   };
+
+  const closeOnEsc = useCallback((event) => {
+    if (event.keyCode === 27) {
+      onClose();
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", closeOnEsc, false);
+
+    return () => {
+      document.removeEventListener("keydown", closeOnEsc, false);
+    };
+  }, []);
 
   return portalNode
     ? ReactDOM.createPortal(

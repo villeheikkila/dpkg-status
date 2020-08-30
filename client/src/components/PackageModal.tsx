@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, RefObject, MutableRefObject } from "react";
 import styled from "styled-components";
 import NotesCard from "./NotesCard";
 import TagsCard from "./TagsCard";

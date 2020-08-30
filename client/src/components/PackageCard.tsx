@@ -57,7 +57,7 @@ const Wrapper = styled.button`
 `;
 
 const Content = styled.div`
-  width: 100%;
+  width: 300px;
   border-radius: 2px;
   background: #fff;
   height: 150px;
