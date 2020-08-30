@@ -6,7 +6,7 @@ const Portal: React.FC<{ onClose: () => void }> = ({ onClose, children }) => {
   const portalNode = useContext(PortalNodeContext);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  const onOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const onClickOutside = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const isClickOutside = overlayRef.current?.isEqualNode(e.target as Node);
     if (!isClickOutside) {
       return;
@@ -16,7 +16,7 @@ const Portal: React.FC<{ onClose: () => void }> = ({ onClose, children }) => {
 
   return portalNode
     ? ReactDOM.createPortal(
-        <Wrapper ref={overlayRef} onMouseDown={onOverlayClick}>
+        <Wrapper ref={overlayRef} onMouseDown={onClickOutside}>
           <PortalContent>{children}</PortalContent>
         </Wrapper>,
         portalNode
@@ -43,6 +43,19 @@ const PortalContent = styled.div`
   left: 30%;
   margin-top: -50px;
   margin-left: -50px;
+
+  @media (max-width: 1200px) {
+    left: 10vw;
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  @media (max-width: 900px) {
+    left: 0;
+    top: 10vw;
+    margin-top: 0;
+    margin-left: 0;
+  }
 `;
 
 type PortalNode = Element | null;

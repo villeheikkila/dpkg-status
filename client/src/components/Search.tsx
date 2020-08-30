@@ -105,13 +105,18 @@ const Input = styled.input`
 `;
 
 const Tag = styled.button`
-  padding: 3px;
+  padding: 4px;
   border: none;
   outline: none;
   font: inherit;
   color: inherit;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
   background: #fff;
+
+  :hover,
+  :focus {
+    background-color: rgba(232, 59, 63, 0.2);
+  }
 `;
 
 const TagArea = styled.div`
@@ -153,17 +158,19 @@ const Button = styled.button`
   color: inherit;
   background: none;
 
-  :hover {
-    border: 1px solid lightcyan;
-    background-color: lightcyan;
+  :hover,
+  :focus {
+    border: 1px solid #14af83;
+    background-color: #14af83;
     border-radius: 4px;
+    color: #fff;
   }
 `;
 
 const Message = styled.span`
   padding-top: 4px;
   place-self: center;
-  color: #00ffff;
+  color: #745fb5;
 `;
 
 export default Search;

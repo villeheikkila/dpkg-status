@@ -23,8 +23,6 @@ const NotesCard = ({ id }: { id: number }) => {
     })();
   }, [id]);
 
-  if (id === null) return null;
-
   const onNoteSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const note = textRef.current?.value;

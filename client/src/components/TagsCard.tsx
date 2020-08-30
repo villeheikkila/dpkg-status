@@ -19,26 +19,27 @@ const TagsCard = ({ id }: { id: number }) => {
     })();
   }, [id]);
 
-  if (id === null) return null;
-
-  const onKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      const value = inputRef?.current?.value || "";
-
-      if (value === "") return;
-
-      const res = await axios.post("http://localhost:2222/api/tags", {
-        tag: value,
-        packageId: id,
-      });
-
-      if (res.status === 201 && !tags.includes(res.data.data.tag)) {
-        setTags([...tags, res.data.data]);
-      }
+      addTag();
     }
   };
 
-  const onClick = async (tagId: number) => {
+  const addTag = async () => {
+    const value = inputRef?.current?.value || "";
+
+    if (value === "") return;
+    const res = await axios.post("http://localhost:2222/api/tags", {
+      tag: value,
+      packageId: id,
+    });
+
+    if (res.status === 201 && !tags.includes(res.data.data.tag)) {
+      setTags([...tags, res.data.data]);
+    }
+  };
+
+  const deleteTag = async (tagId: number) => {
     if (tagId) {
       const res = await axios.delete(
         `http://localhost:2222/api/tags/${tagId}/${id}`
@@ -50,20 +51,45 @@ const TagsCard = ({ id }: { id: number }) => {
 
   return (
     <ModalCardSection heading="tags">
-      <Input ref={inputRef} onKeyPress={onKeyPress} />
       <ChipContainer>
         {tags.map(({ tag, id }) => (
-          <Chip key={`tag-${id}`} onClick={() => onClick(id)}>
+          <Chip key={`tag-${id}`} onClick={() => deleteTag(id)}>
             {tag}
           </Chip>
         ))}
       </ChipContainer>
+
+      <InputContainer>
+        <Input ref={inputRef} onKeyPress={onKeyPress} />
+        <InputButton onClick={() => addTag()}>Add</InputButton>
+      </InputContainer>
     </ModalCardSection>
   );
 };
 
 const Input = styled.input`
   width: 150px;
+  padding: 3px;
+`;
+
+const InputButton = styled.button`
+  background: none;
+  color: inherit;
+  border: 1px solid black;
+  background-color: #4f3d85;
+  color: #fff;
+  padding: 8px;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+
+  :hover {
+    background-color: #745fb5;
+  }
+`;
+
+const InputContainer = styled.div`
+  display: flex;
 `;
 
 const Chip = styled.button`
@@ -86,6 +112,7 @@ const ChipContainer = styled.div`
   grid-gap: 10px;
   width: 100%;
   grid-template-columns: repeat(auto-fill, 110px);
+  margin: 10px 0;
 `;
 
 export default TagsCard;

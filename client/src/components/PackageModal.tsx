@@ -104,12 +104,21 @@ const ChipContainer = styled.div`
   grid-gap: 10px;
   width: 100%;
   grid-template-columns: repeat(auto-fill, 110px);
+  margin-top: 10px;
 `;
 
 const Container = styled.div`
   width: 800px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 1000px) {
+    width: 600px;
+  }
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `;
 
 export default PackageModal;
