@@ -3,14 +3,18 @@ import styled from "styled-components";
 import axios from "axios";
 import ModalCardSection from "./ModalCardSection";
 
+interface Tag {
+  id: number;
+  tag: string;
+}
 const TagsCard = ({ id }: { id: number }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(`http://localhost:2222/api/tags/${id}`);
-      const tags = data.data.map((e: any) => e.tag);
+      const data = await axios.get(`http://localhost:2222/api/tags/${id}`);
+      const tags = data.data.data;
       setTags(tags);
     })();
   }, [id]);
@@ -29,8 +33,18 @@ const TagsCard = ({ id }: { id: number }) => {
       });
 
       if (res.status === 201 && !tags.includes(res.data.data.tag)) {
-        setTags([...tags, res.data.data.tag]);
+        setTags([...tags, res.data.data]);
       }
+    }
+  };
+
+  const onClick = async (tagId: number) => {
+    if (tagId) {
+      const res = await axios.delete(
+        `http://localhost:2222/api/tags/${tagId}/${id}`
+      );
+
+      setTags(tags.filter((e) => e.id !== res.data.data[0].tagId));
     }
   };
 
@@ -38,8 +52,8 @@ const TagsCard = ({ id }: { id: number }) => {
     <ModalCardSection heading="tags">
       <Input ref={inputRef} onKeyPress={onKeyPress} />
       <ChipContainer>
-        {tags.map((tag) => (
-          <Chip>{tag}</Chip>
+        {tags.map(({ tag, id }) => (
+          <Chip onClick={() => onClick(id)}>{tag}</Chip>
         ))}
       </ChipContainer>
     </ModalCardSection>

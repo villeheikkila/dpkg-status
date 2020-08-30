@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-import { getTagsByPackageId, addTag, deleteTagByID, getAllTags } from '../db/queries/tags';
+import { getTagsByPackageId, addTag, deleteTagByID, getAllTags, deleteTagFromPackage } from '../db/queries/tags';
 import { Context } from 'koa';
 
 const router = new Router();
@@ -69,6 +69,32 @@ router.post(`${BASE_URL}`, async (ctx: Context) => {
 router.delete(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
         const tag = await deleteTagByID(ctx.params.id);
+
+        if (tag.length) {
+            ctx.status = 200;
+            ctx.body = {
+                status: 'success',
+                data: tag,
+            };
+        } else {
+            ctx.status = 404;
+            ctx.body = {
+                status: 'error',
+                message: 'That tag does not exist.',
+            };
+        }
+    } catch (error) {
+        ctx.status = 400;
+        ctx.body = {
+            status: 'error',
+            message: error.message || 'Sorry, an error has occurred.',
+        };
+    }
+});
+
+router.delete(`${BASE_URL}/:tagId/:packageId`, async (ctx: Context) => {
+    try {
+        const tag = await deleteTagFromPackage(ctx.params.tagId, ctx.params.packageId);
 
         if (tag.length) {
             ctx.status = 200;

@@ -22,7 +22,7 @@ const Search = ({
     setSearch(inputValue);
   }, [inputValue]);
 
-  const [selectedTags, dispatch] = useReducer((state: any, action: any) => {
+  const [selectedTags, dispatch] = useReducer((state: Tag[], action: any) => {
     switch (action.type) {
       case "add":
         return [
@@ -43,8 +43,7 @@ const Search = ({
     setSelectedTags(selectedTags);
   }, [selectedTags]);
 
-  const filteredTags =
-    tags && tags.filter((e) => e.tag.includes(search)).slice(0, 10);
+  const filteredTags = tags && tags.filter((e) => e.tag.includes(search));
 
   if (!tags) return null;
 
@@ -54,6 +53,7 @@ const Search = ({
       tag,
     });
     setSearch("");
+    setInputValue("");
   };
 
   return (
@@ -64,17 +64,23 @@ const Search = ({
         onChange={({ target }) => setInputValue(target.value)}
       />
 
-      <Container>
-        <Menu display={search !== "" ? "block" : "none"}>
-          {filteredTags.map((tag: any) => (
-            <Item>
-              <Button onClick={() => onClick(tag)}>{tag.tag}</Button>
-            </Item>
-          ))}
-        </Menu>
-      </Container>
+      <DropdownContainer>
+        <Dropdown display={inputValue.length > 1 ? "flex" : "none"}>
+          {filteredTags.length !== 0
+            ? filteredTags.slice(0, 10).map((tag) => (
+                <Item>
+                  <Button onClick={() => onClick(tag)}>{tag.tag}</Button>
+                </Item>
+              ))
+            : "No tags found"}
+          {filteredTags.length > 10 && (
+            <Message>Some tags were hidden </Message>
+          )}
+        </Dropdown>
+      </DropdownContainer>
+
       <TagArea>
-        {selectedTags.map((tag: any) => (
+        {selectedTags.map((tag) => (
           <Tag onClick={() => dispatch({ type: "remove", tag })}>{tag.tag}</Tag>
         ))}
       </TagArea>
@@ -118,13 +124,13 @@ const SearchArea = styled.div`
   width: 300px;
 `;
 
-const Container = styled.div`
+const DropdownContainer = styled.div`
   position: relative;
   display: inline-block;
   width: 100%;
 `;
 
-const Menu = styled.ul<{ display?: "none" | "block" }>`
+const Dropdown = styled.ul<{ display?: "none" | "flex" }>`
   display: ${(props) => props.display || "none"};
   position: absolute;
   z-index: 100;
@@ -132,6 +138,7 @@ const Menu = styled.ul<{ display?: "none" | "block" }>`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
   width: 300px;
   padding: 10px;
+  flex-direction: column;
 `;
 
 const Item = styled.li`
@@ -151,6 +158,12 @@ const Button = styled.button`
     background-color: lightcyan;
     border-radius: 4px;
   }
+`;
+
+const Message = styled.span`
+  padding-top: 4px;
+  place-self: center;
+  color: #00ffff;
 `;
 
 export default Search;

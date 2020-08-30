@@ -38,12 +38,13 @@ const App = () => {
     <>
       <Header>
         <Heading>dkpg-status</Heading>
-        <Search setSelectedTags={setSelectedTags} />
-
         <Stats>
-          <p>Total packages: {data.length}</p>
-          <p>Currently showing: {sortedData.length}</p>
+          <p>
+            Total packages: {data.length}
+            {data.length !== sortedData.length && ` (${sortedData.length})`}
+          </p>
         </Stats>
+        <Search setSelectedTags={setSelectedTags} />
       </Header>
 
       <Page>
@@ -93,6 +94,8 @@ const Heading = styled.h1`
   text-align: center;
   vertical-align: middle;
   font-size: 48px;
+  margin: 0;
+  padding: 20px;
 `;
 
 const Stats = styled.div`
