@@ -94,9 +94,11 @@ const Input = styled.input`
   font-size: 14;
   border: none;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  outline: none;
 
-  ::selection {
-    outline: none;
+  :focus {
+    border: 2px solid #14af83;
+    border-radius: 2px;
   }
 
   ::placeholder {
