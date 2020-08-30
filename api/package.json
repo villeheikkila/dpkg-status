@@ -24,7 +24,7 @@
         "koa-mount": "^4.0.0",
         "koa-router": "^9.4.0",
         "koa-static": "^5.0.0",
-        "pg": "^8.3.3"
+        "pg": "^7.12.1"
     },
     "devDependencies": {
         "@types/http-status-codes": "^1.2.0",
