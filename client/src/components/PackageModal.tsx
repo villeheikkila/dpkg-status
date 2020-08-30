@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import axios from "axios";
 import NotesCard from "./NotesCard";
+import TagsCard from "./TagsCard";
 
 const PackageModal = ({
   id,
@@ -12,18 +12,6 @@ const PackageModal = ({
   data: any;
   onSelect: (id: number) => void;
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const textRef = useRef<HTMLTextAreaElement>(null);
-  const [tags, setTags] = useState<string[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(`http://localhost:2222/api/tags/${id}`);
-      const tags = data.data.map((e: any) => e.tag);
-      setTags(tags);
-    })();
-  }, [id]);
-
   if (id === null) return null;
 
   const { dependencies, description, name, alternatives } = data.find(
@@ -37,23 +25,6 @@ const PackageModal = ({
   const getAltDeps =
     alternatives &&
     alternatives.map((id: any) => data.find((_: any) => _.id === id));
-
-  const onKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const value = inputRef?.current?.value || "";
-
-      if (value === "") return;
-
-      const res = await axios.post("http://localhost:2222/api/tags", {
-        tag: value,
-        packageId: id,
-      });
-
-      if (res.status === 201 && !tags.includes(res.data.data.tag)) {
-        setTags([...tags, res.data.data.tag]);
-      }
-    }
-  };
 
   return (
     <Container>
@@ -101,18 +72,8 @@ const PackageModal = ({
           )}
         </ModalContent>
       )}
-      <ModalContent>
-        <HeadingText>
-          <h4 style={{ margin: 0 }}>Tags</h4>
-        </HeadingText>
-        <Input ref={inputRef} onKeyPress={onKeyPress} />
-        <ChipContainer>
-          {tags.map((tag) => (
-            <Chip>{tag}</Chip>
-          ))}
-        </ChipContainer>
-      </ModalContent>
 
+      <TagsCard id={id} />
       <NotesCard id={id} />
     </Container>
   );
@@ -124,10 +85,6 @@ const Name = styled.div`
   text-align: center;
   vertical-align: middle;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
-
-const Input = styled.input`
-  width: 150px;
 `;
 
 const HeadingText = styled.div`
@@ -167,13 +124,6 @@ const ModalContent = styled.div<{ height?: number }>`
   height: ${(props) => props.height};
   margin-top: 5px;
   padding: 20px;
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  height: 100px;
-  border: 1px solid black;
-  resize: none;
 `;
 
 export default PackageModal;
