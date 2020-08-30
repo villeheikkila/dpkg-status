@@ -5,8 +5,12 @@ module.exports = {
         migrations: {
             directory: __dirname + '/src/db/migrations',
         },
-        seeds: {
-            directory: __dirname + '/src/db/seeds',
+    },
+    production: {
+        client: 'pg',
+        connection: process.env.DATABASE_URL + '?ssl=true',
+        migrations: {
+            directory: __dirname + '/src/db/migrations',
         },
     },
 };

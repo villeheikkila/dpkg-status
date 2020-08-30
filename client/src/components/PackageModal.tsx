@@ -19,7 +19,6 @@ const PackageModal = ({
   if (!packageData) return null;
 
   const { dependencies, description, name, alternatives } = packageData;
-  console.log("dependencies: ", dependencies);
 
   const getDeps = dependencies
     ? dependencies.map((id: number) => data.find((_: Package) => _.id === id))
