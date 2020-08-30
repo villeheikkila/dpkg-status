@@ -8,7 +8,6 @@ const BASE_URL = `/api/notes`;
 router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
         const notes = await getNotesByPackageId(ctx.params.id);
-        console.log('notes: ', notes);
 
         if (notes) {
             ctx.body = {
@@ -23,7 +22,7 @@ router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
             };
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 });
 

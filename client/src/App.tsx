@@ -4,33 +4,42 @@ import PackageCard from "./components/PackageCard";
 import Portal from "./components/Portal";
 import PackageModal from "./components/PackageModal";
 import useAxios from "./hooks/useAxios";
+import Search, { Tag } from "./components/Search";
+
+interface Package {
+  alternatives: number[] | null;
+  dependencies: number[] | null;
+  description: string | null;
+  id: number;
+  name: string;
+  tags: number[];
+}
 
 const App = () => {
-  const data: any = useAxios("http://localhost:2222/api/packages");
-  const tags: any = useAxios("http://localhost:2222/api/tags");
-  console.log("tags: ", tags);
-  const [search, setSearch] = useState("");
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const data: Package[] = useAxios("http://localhost:2222/api/packages");
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [showModal, setShowModal] = useState<number | null>(null);
 
   if (!data) return <div>Loading</div>;
 
-  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const value = inputRef?.current?.value || "";
-      setSearch(value);
-    }
-  };
+  const filteredData =
+    selectedTags.length === 0
+      ? data
+      : data.filter(({ tags }: any) => {
+          const data = selectedTags.map(({ id }: any) => tags.includes(id));
+          return data.every((check: boolean) => check === true);
+        });
 
-  const sortedData = data
-    .filter((e: any) => e.name.includes(search))
-    .sort((a: any, b: any) => a.name > b.name);
+  const sortedData = filteredData.sort((a, b) =>
+    a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+  );
 
   return (
     <>
       <Header>
         <Heading>dkpg-status</Heading>
-        <Input placeholder="Search..." ref={inputRef} onKeyPress={onKeyPress} />
+        <Search setSelectedTags={setSelectedTags} />
+
         <Stats>
           <p>Total packages: {data.length}</p>
           <p>Currently showing: {sortedData.length}</p>
@@ -38,11 +47,11 @@ const App = () => {
       </Header>
       <Page>
         <GridWrapper>
-          {sortedData?.map(({ id, name, description, ...rest }: any) => (
+          {sortedData.map(({ id, name, description }) => (
             <PackageCard
               key={`package-${id}`}
               name={name}
-              description={description}
+              description={description || ""}
               onClick={() => setShowModal(id)}
             />
           ))}
@@ -73,7 +82,6 @@ const Page = styled.div`
 
 const Header = styled.header`
   display: flex;
-  height: 200px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -93,22 +101,6 @@ const Stats = styled.div`
 
   > p {
     margin: 0;
-  }
-`;
-
-const Input = styled.input`
-  height: 40px;
-  width: 300px;
-  font-size: 14;
-  border: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
-  ::selection {
-    outline: none;
-  }
-
-  ::placeholder {
-    padding-left: 10px;
   }
 `;
 

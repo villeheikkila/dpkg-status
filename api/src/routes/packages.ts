@@ -19,10 +19,8 @@ router.get(BASE_URL, async (ctx: Context) => {
 });
 
 router.get(`${BASE_URL}/search/:id`, async (ctx: Context) => {
-    console.log('hei', parseInt(ctx.params.id));
     try {
         const data = await getPackagesByTag(parseInt(ctx.params.id));
-        console.log('data: ', data);
 
         ctx.body = {
             status: 'success',
