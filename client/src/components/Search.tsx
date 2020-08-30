@@ -126,6 +126,7 @@ const Container = styled.div`
 const Menu = styled.ul<{ display?: "none" | "block" }>`
   display: ${(props) => props.display || "none"};
   position: absolute;
+  z-index: 100;
   background: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
   width: 300px;

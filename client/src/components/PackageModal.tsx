@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import NotesCard from "./NotesCard";
 
 const PackageModal = ({
   id,
@@ -14,19 +15,12 @@ const PackageModal = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
   const [tags, setTags] = useState<string[]>([]);
-  const [notes, setNotes] = useState<string[]>([]);
 
   useEffect(() => {
     (async () => {
       const { data } = await axios.get(`http://localhost:2222/api/tags/${id}`);
       const tags = data.data.map((e: any) => e.tag);
       setTags(tags);
-    })();
-
-    (async () => {
-      const { data } = await axios.get(`http://localhost:2222/api/notes/${id}`);
-      const tags = data.data.map((e: any) => e.note);
-      setNotes(tags);
     })();
   }, [id]);
 
@@ -58,22 +52,6 @@ const PackageModal = ({
       if (res.status === 201 && !tags.includes(res.data.data.tag)) {
         setTags([...tags, res.data.data.tag]);
       }
-    }
-  };
-
-  const onNoteSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const note = textRef.current?.value;
-
-    if (!note) return null;
-
-    const res = await axios.post("http://localhost:2222/api/notes", {
-      note,
-      packageId: id,
-    });
-
-    if (res.status === 201) {
-      setNotes([...tags, res.data.data.note]);
     }
   };
 
@@ -135,16 +113,7 @@ const PackageModal = ({
         </ChipContainer>
       </ModalContent>
 
-      <ModalContent>
-        <HeadingText>
-          <h4 style={{ margin: 0 }}>Notes</h4>
-        </HeadingText>
-        {notes}
-        <form onSubmit={onNoteSubmit}>
-          <TextArea ref={textRef} />
-          <input type="submit" value="Submit" />
-        </form>
-      </ModalContent>
+      <NotesCard id={id} />
     </Container>
   );
 };
