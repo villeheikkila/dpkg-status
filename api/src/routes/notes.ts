@@ -53,21 +53,21 @@ router.post(`${BASE_URL}`, async (ctx: Context) => {
     }
 });
 
-router.delete(`${BASE_URL}/:id`, async (ctx: Context) => {
+router.delete(`${BASE_URL}/:noteId/:packageId`, async (ctx: Context) => {
     try {
-        const tag = await deleteNoteByID(ctx.params.id);
+        const data = await deleteNoteByID(ctx.params.noteId, ctx.params.packageId);
 
-        if (tag.length) {
+        if (data.length) {
             ctx.status = 200;
             ctx.body = {
                 status: 'success',
-                data: tag,
+                data,
             };
         } else {
             ctx.status = 404;
             ctx.body = {
                 status: 'error',
-                message: 'That tag does not exist.',
+                message: 'That note does not exist.',
             };
         }
     } catch (error) {

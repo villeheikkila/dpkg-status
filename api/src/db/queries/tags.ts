@@ -30,7 +30,8 @@ const deleteTagByID = (id: number) => {
     return knex('tags').del().where({ id }).returning('*');
 };
 
-const deleteTagFromPackage = async (tagId: number, packageId: number) =>
-    knex('packages_tags').del().where({ tagId, packageId }).returning('*');
+const deleteTagFromPackage = async (tagId: number, packageId: number) => {
+    return knex('packages_tags').del().where({ tagId, packageId }).returning('*');
+};
 
 export { getTagsByPackageId, addTag, deleteTagByID, getAllTags, deleteTagFromPackage };

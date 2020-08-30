@@ -1,1 +1,1 @@
-DELETE http://localhost:2222/api/tags/73 HTTP/1.1
+DELETE http://localhost:2222/api/notes/21/254 HTTP/1.1

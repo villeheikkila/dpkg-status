@@ -91,6 +91,12 @@ const Chip = styled.button`
   padding: 8px;
   width: 100px;
   background-color: #f8f9fa;
+
+  :hover,
+  :focus {
+    background-color: #14af83;
+    color: white;
+  }
 `;
 
 const ChipContainer = styled.div`
