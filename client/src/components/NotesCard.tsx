@@ -36,8 +36,8 @@ const NotesCard = ({ id }: { id: number }) => {
   return (
     <ModalCardSection heading="notes">
       <NoteContainer>
-        {notes.map((note) => (
-          <Note>{note}</Note>
+        {notes.map((note, i) => (
+          <Note key={`note-${i}`}>{note}</Note>
         ))}
       </NoteContainer>
 

@@ -53,7 +53,9 @@ const TagsCard = ({ id }: { id: number }) => {
       <Input ref={inputRef} onKeyPress={onKeyPress} />
       <ChipContainer>
         {tags.map(({ tag, id }) => (
-          <Chip onClick={() => onClick(id)}>{tag}</Chip>
+          <Chip key={`tag-${id}`} onClick={() => onClick(id)}>
+            {tag}
+          </Chip>
         ))}
       </ChipContainer>
     </ModalCardSection>

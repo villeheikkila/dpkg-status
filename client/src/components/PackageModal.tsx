@@ -43,7 +43,12 @@ const PackageModal = ({
         <ModalCardSection heading="dependencies">
           <ChipContainer>
             {getDeps.map((e: any) => (
-              <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
+              <Chip
+                key={`dependency-${e.id}-${id}`}
+                onClick={() => onSelect(e.id)}
+              >
+                {e.name}
+              </Chip>
             ))}
           </ChipContainer>
         </ModalCardSection>
@@ -53,7 +58,12 @@ const PackageModal = ({
         <ModalCardSection heading="alternatives">
           <ChipContainer>
             {getAltDeps.map((e: any) => (
-              <Chip onClick={() => onSelect(e.id)}>{e.name}</Chip>
+              <Chip
+                key={`alternatives-${e.id}-${id}`}
+                onClick={() => onSelect(e.id)}
+              >
+                {e.name}
+              </Chip>
             ))}
           </ChipContainer>
         </ModalCardSection>

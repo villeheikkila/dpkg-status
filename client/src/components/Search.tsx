@@ -41,7 +41,7 @@ const Search = ({
 
   useEffect(() => {
     setSelectedTags(selectedTags);
-  }, [selectedTags]);
+  }, [selectedTags, setSelectedTags]);
 
   const filteredTags = tags && tags.filter((e) => e.tag.includes(search));
 
@@ -67,8 +67,8 @@ const Search = ({
       <DropdownContainer>
         <Dropdown display={inputValue.length > 1 ? "flex" : "none"}>
           {filteredTags.length !== 0
-            ? filteredTags.slice(0, 10).map((tag) => (
-                <Item>
+            ? filteredTags.slice(0, 10).map((tag, i) => (
+                <Item key={`$item-${tag.id}-${i}`}>
                   <Button onClick={() => onClick(tag)}>{tag.tag}</Button>
                 </Item>
               ))
