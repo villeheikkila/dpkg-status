@@ -1,14 +1,16 @@
+require('dotenv').config({ path: '.env' });
+
 module.exports = {
     development: {
         client: 'pg',
-        connection: 'postgres://localhost/dkpkdb',
+        connection: process.env.DATABASE_URL,
         migrations: {
             directory: __dirname + '/src/db/migrations',
         },
     },
     production: {
         client: 'pg',
-        connection: process.env.DATABASE_URL + '?ssl=true',
+        connection: process.env.DATABASE_URL,
         migrations: {
             directory: __dirname + '/src/db/migrations',
         },

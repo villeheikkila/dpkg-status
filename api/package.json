@@ -5,6 +5,7 @@
     "main": "index.ts",
     "scripts": {
         "start": "nodemon --watch src -e ts,tsx --exec ts-node index.ts",
+        "knex-migrate": "knex migrate:latest structure",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],

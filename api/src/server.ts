@@ -14,9 +14,7 @@ const PORT = process.env.PORT || 2222;
 
 build.use(serve(__dirname + '/build'));
 app.use(mount('/', build));
-build.use(serve(__dirname + '/build'));
 
-app.use(mount('/', build));
 app.use(cors());
 app.use(bodyParser());
 app.use(initRoute.routes());

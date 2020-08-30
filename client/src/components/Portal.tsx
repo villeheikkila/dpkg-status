@@ -20,11 +20,14 @@ const Portal: React.FC<{ onClose: () => void }> = ({ onClose, children }) => {
     onClose();
   };
 
-  const closeOnEsc = useCallback((event) => {
-    if (event.keyCode === 27) {
-      onClose();
-    }
-  }, []);
+  const closeOnEsc = useCallback(
+    (event) => {
+      if (event.keyCode === 27) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
 
   useEffect(() => {
     document.addEventListener("keydown", closeOnEsc, false);
@@ -32,7 +35,7 @@ const Portal: React.FC<{ onClose: () => void }> = ({ onClose, children }) => {
     return () => {
       document.removeEventListener("keydown", closeOnEsc, false);
     };
-  }, []);
+  }, [closeOnEsc]);
 
   return portalNode
     ? ReactDOM.createPortal(
