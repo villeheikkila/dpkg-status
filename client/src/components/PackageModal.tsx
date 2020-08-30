@@ -19,6 +19,7 @@ const PackageModal = ({
   useEffect(() => {
     (async () => {
       const { data } = await axios.get(`http://localhost:2222/api/tags/${id}`);
+      console.log("data: ", data);
       const tags = data.data.map((e: any) => e.tag);
       setTags(tags);
     })();
@@ -28,7 +29,7 @@ const PackageModal = ({
       const tags = data.data.map((e: any) => e.note);
       setNotes(tags);
     })();
-  }, []);
+  }, [id]);
 
   if (id === null) return null;
 
@@ -55,7 +56,9 @@ const PackageModal = ({
         packageId: id,
       });
 
-      if (res.status === 201) {
+      console.log("res: ", res);
+
+      if (res.status === 201 && !tags.includes(res.data.data.tag)) {
         setTags([...tags, res.data.data.tag]);
       }
     }
@@ -71,6 +74,7 @@ const PackageModal = ({
       note,
       packageId: id,
     });
+    console.log("res: ", res);
 
     if (res.status === 201) {
       setNotes([...tags, res.data.data.note]);

@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-import { getAllPackages, getPackageByID } from '../db/queries/packages';
+import { getAllPackages, getPackageByID, getPackagesByTag } from '../db/queries/packages';
 import { Context } from 'koa';
 
 const router = new Router();
@@ -12,6 +12,21 @@ router.get(BASE_URL, async (ctx: Context) => {
         ctx.body = {
             status: 'success',
             data: packages,
+        };
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+router.get(`${BASE_URL}/search/:id`, async (ctx: Context) => {
+    console.log('hei', parseInt(ctx.params.id));
+    try {
+        const data = await getPackagesByTag(parseInt(ctx.params.id));
+        console.log('data: ', data);
+
+        ctx.body = {
+            status: 'success',
+            data,
         };
     } catch (error) {
         console.error(error);

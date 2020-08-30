@@ -5,17 +5,16 @@ interface Note {
     note: string;
 }
 
-const getNotesByPackageId = (packageId: number) => knex('notes').select('*').where({ packageId });
+const getNotesByPackageId = (id: number) =>
+    knex('notes').whereIn('id', knex('packages_notes').select('noteId').where('packageId', id));
 
-const addNote = ({ note, packageId }: Note) =>
-    knex('notes')
-        .insert({ note })
-        .returning('id')
-        .then((response: any) => {
-            knex('packages_notes').insert({ packageId, noteId: response[0] });
-            return response[0];
-        })
-        .then((id: number) => knex('notes').first().where({ id }));
+const addNote = async ({ note, packageId }: Note) => {
+    const newNote = await knex('notes').insert({ note }).returning('id');
+
+    await knex('packages_notes').insert({ packageId, noteId: newNote[0] }).returning('noteId');
+
+    return knex('notes').where({ id: newNote[0] }).first();
+};
 
 const deleteNoteByID = (id: number) => knex('notes').del().where({ id }).returning('*');
 

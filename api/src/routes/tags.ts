@@ -1,15 +1,28 @@
 const Router = require('koa-router');
-import { getTagsByPackageId, addTag, deleteTagByID } from '../db/queries/tags';
+import { getTagsByPackageId, addTag, deleteTagByID, getAllTags } from '../db/queries/tags';
 import { Context } from 'koa';
 
 const router = new Router();
 const BASE_URL = `/api/tags`;
 
+router.get(BASE_URL, async (ctx: Context) => {
+    try {
+        const data = await getAllTags();
+
+        ctx.body = {
+            status: 'success',
+            data,
+        };
+    } catch (error) {
+        console.error(error);
+    }
+});
+
 router.get(`${BASE_URL}/:id`, async (ctx: Context) => {
     try {
         const tags = await getTagsByPackageId(ctx.params.id);
 
-        if (tags.length) {
+        if (tags) {
             ctx.body = {
                 status: 'success',
                 data: tags,

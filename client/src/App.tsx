@@ -7,6 +7,8 @@ import useAxios from "./hooks/useAxios";
 
 const App = () => {
   const data: any = useAxios("http://localhost:2222/api/packages");
+  const tags: any = useAxios("http://localhost:2222/api/tags");
+  console.log("tags: ", tags);
   const [search, setSearch] = useState("");
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [showModal, setShowModal] = useState<number | null>(null);
