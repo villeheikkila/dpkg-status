@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import ModalCardSection from "./ModalCardSection";
@@ -42,9 +42,7 @@ const NotesCard = ({ id }: { id: number }) => {
 
   const deleteNote = async (noteId: number) => {
     if (noteId) {
-      const res = await axios.delete(`${BASE_URL}/notes/${noteId}/${id}`);
-      console.log("res: ", res);
-
+      const res = await axios.delete(`${BASE_URL}/api/notes/${noteId}/${id}`);
       setNotes(notes.filter((e) => e.id !== res.data.data[0].id));
     }
   };
@@ -53,12 +51,10 @@ const NotesCard = ({ id }: { id: number }) => {
     <ModalCardSection heading="notes">
       <NoteContainer>
         {notes.map(({ id, note }, i) => (
-          <>
+          <Fragment key={`note-${i}`}>
             {i !== 0 && <Divider />}
-            <Note key={`note-${i}`} onClick={() => deleteNote(id)}>
-              {note}
-            </Note>
-          </>
+            <Note onClick={() => deleteNote(id)}>{note}</Note>
+          </Fragment>
         ))}
       </NoteContainer>
 
