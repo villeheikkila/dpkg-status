@@ -5,6 +5,7 @@ import Portal from "./components/Portal";
 import PackageModal from "./components/PackageModal";
 import useAxios from "./hooks/useAxios";
 import Search, { Tag } from "./components/Search";
+import { BASE_URL } from ".";
 
 export interface Package {
   alternatives: number[] | null;
@@ -16,7 +17,7 @@ export interface Package {
 }
 
 const App = () => {
-  const data: Package[] = useAxios("http://localhost:2222/api/packages");
+  const data: Package[] = useAxios(`${BASE_URL}/api/packages`);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [showPackage, setShowPackage] = useState<number | null>(null);
 

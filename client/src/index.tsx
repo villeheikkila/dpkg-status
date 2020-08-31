@@ -5,6 +5,9 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { PortalProvider } from "./components/Portal";
 
+export const BASE_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:2222";
+
 ReactDOM.render(
   <PortalProvider>
     <React.StrictMode>

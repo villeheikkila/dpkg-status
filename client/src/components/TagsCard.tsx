@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import ModalCardSection from "./ModalCardSection";
+import { BASE_URL } from "..";
 
 interface Tag {
   id: number;
@@ -13,7 +14,7 @@ const TagsCard = ({ id }: { id: number }) => {
 
   useEffect(() => {
     (async () => {
-      const data = await axios.get(`http://localhost:2222/api/tags/${id}`);
+      const data = await axios.get(`${BASE_URL}/api/tags/${id}`);
       const tags = data.data.data;
       setTags(tags);
     })();
@@ -33,7 +34,7 @@ const TagsCard = ({ id }: { id: number }) => {
     const value = inputRef?.current?.value || "";
 
     if (value === "") return;
-    const res = await axios.post("http://localhost:2222/api/tags", {
+    const res = await axios.post(`${BASE_URL}/api/tags`, {
       tag: value,
       packageId: id,
     });
@@ -45,9 +46,7 @@ const TagsCard = ({ id }: { id: number }) => {
 
   const deleteTag = async (tagId: number) => {
     if (tagId) {
-      const res = await axios.delete(
-        `http://localhost:2222/api/tags/${tagId}/${id}`
-      );
+      const res = await axios.delete(`${BASE_URL}/api/tags/${tagId}/${id}`);
 
       setTags(tags.filter((e) => e.id !== res.data.data[0].tagId));
     }

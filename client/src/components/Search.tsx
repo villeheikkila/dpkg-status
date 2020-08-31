@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useEffect } from "react";
 import styled from "styled-components";
 import useAxios from "../hooks/useAxios";
+import { BASE_URL } from "..";
 
 export interface Tag {
   id: number;
@@ -14,7 +15,7 @@ const Search = ({
 }: {
   setSelectedTags: (tags: Tag[]) => void;
 }) => {
-  const tags: Tag[] = useAxios("http://localhost:2222/api/tags");
+  const tags: Tag[] = useAxios(`${BASE_URL}/api/tags`);
   const [search, setSearch] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
 

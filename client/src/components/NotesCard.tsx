@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import ModalCardSection from "./ModalCardSection";
+import { BASE_URL } from "..";
 
 interface Note {
   id: number;
@@ -14,7 +15,7 @@ const NotesCard = ({ id }: { id: number }) => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(`http://localhost:2222/api/notes/${id}`);
+      const { data } = await axios.get(`${BASE_URL}/api/notes/${id}`);
       const notes = data.data.map((e: any) => {
         return { ...e };
       });
@@ -29,7 +30,7 @@ const NotesCard = ({ id }: { id: number }) => {
 
     if (!note) return null;
 
-    const res = await axios.post("http://localhost:2222/api/notes", {
+    const res = await axios.post(`${BASE_URL}/api/notes`, {
       note,
       packageId: id,
     });
@@ -41,9 +42,7 @@ const NotesCard = ({ id }: { id: number }) => {
 
   const deleteNote = async (noteId: number) => {
     if (noteId) {
-      const res = await axios.delete(
-        `http://localhost:2222/api/notes/${noteId}/${id}`
-      );
+      const res = await axios.delete(`${BASE_URL}/notes/${noteId}/${id}`);
       console.log("res: ", res);
 
       setNotes(notes.filter((e) => e.id !== res.data.data[0].id));
