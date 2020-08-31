@@ -39,7 +39,7 @@ const TagsCard = ({ id }: { id: number }) => {
       packageId: id,
     });
 
-    if (res.status === 201 && !tags.includes(res.data.data.tag)) {
+    if (res.status === 201 && !tags.some((e) => e.tag === res.data.data.tag)) {
       setTags([...tags, res.data.data]);
     }
   };
