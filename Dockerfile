@@ -12,7 +12,7 @@ COPY . .
 RUN cd /usr/src/app/client && npm run-script build
 
 WORKDIR /usr/src/app
-RUN mv ./client/build ./api
+RUN mv ./client/build ./api/src
 
 WORKDIR /usr/src/app/api
 RUN npm install

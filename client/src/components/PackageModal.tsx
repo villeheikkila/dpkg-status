@@ -117,6 +117,8 @@ const Container = styled.div`
 
   @media (max-width: 900px) {
     width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
   }
 `;
 

@@ -14,7 +14,6 @@ const PORT = process.env.PORT || 2222;
 
 build.use(serve(__dirname + '/build'));
 app.use(mount('/', build));
-
 app.use(cors());
 app.use(bodyParser());
 app.use(initRoute.routes());
@@ -24,6 +23,7 @@ app.use(notesRoute.routes());
 
 const server = app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);
+    console.log(`Serving build from ${__dirname + '/build'}`);
 });
 
 module.exports = server;
