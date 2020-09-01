@@ -20,6 +20,10 @@ Clone this git repo
 
 2. Start the development server with "npm start" in the api folder
 
+3. Run migrations on the first run by running "knex-migrate"
+
+4. To init the database with the data from the gist, go to "localhost:2222/api/init"
+
 ### Live Demo
 
 [dkpg-status](https://dkpg-status.netlify.app)
